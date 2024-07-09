@@ -1,4 +1,6 @@
+import 'package:appwrite_bloc_todo/features/auth/cubit/register_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/theme/app_color.dart';
 import '../../../core/utils/app_images_url.dart';
@@ -39,92 +41,99 @@ class _RegisterViewState extends State<RegisterView> {
           physics: const BouncingScrollPhysics(),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-            child: Form(
-              key: _registerFormKey,
-              child: Column(
-                children: [
-                  Image.asset(
-                    AppImagesUrl.logo,
-                    width: 100,
-                    height: 100,
-                  ),
-                  const SizedBox(height: 16),
-                  CustomTextFormField(
-                    controller: _firstNameController,
-                    validator: (val) {
-                      if (val!.isEmpty) {
-                        return AppStrings.required;
-                      }
-                      return null;
-                    },
-                    keyBoardType: TextInputType.name,
-                    obscureText: false,
-                    hintText: AppStrings.firstName,
-                    suffix: null,
-                  ),
-                  const SizedBox(height: 10),
-                  CustomTextFormField(
-                    controller: _lastNameController,
-                    validator: (val) {
-                      if (val!.isEmpty) {
-                        return AppStrings.required;
-                      }
-                      return null;
-                    },
-                    keyBoardType: TextInputType.name,
-                    obscureText: false,
-                    hintText: AppStrings.lastName,
-                    suffix: null,
-                  ),
-                  const SizedBox(height: 10),
-                  CustomTextFormField(
-                    controller: _emailNameController,
-                    validator: (val) {
-                      if (val!.isEmpty) {
-                        return AppStrings.required;
-                      } else if (!ValidationRules.emailValidation.hasMatch(val)) {
-                        return AppStrings.provideValidEmail;
-                      }
-                      return null;
-                    },
-                    keyBoardType: TextInputType.emailAddress,
-                    obscureText: false,
-                    hintText: AppStrings.email,
-                    suffix: null,
-                  ),
-                  const SizedBox(height: 10),
-                  CustomTextFormField(
-                    controller: _passwordNameController,
-                    validator: (val) {
-                      if (val!.isEmpty) {
-                        return AppStrings.required;
-                      }
-                      return null;
-                    },
-                    keyBoardType: TextInputType.visiblePassword,
-                    obscureText: !isPasswordVisible,
-                    hintText: AppStrings.password,
-                    suffix: InkWell(
-                      onTap: () {
-                        setState(() {
-                          isPasswordVisible = !isPasswordVisible;
-                        });
-                      },
-                      child: Icon(
-                        isPasswordVisible ? Icons.visibility : Icons.visibility_off,
-                        color: AppColor.greyColor,
+            child: BlocConsumer<RegisterCubit, RegisterState>(
+              listener: (context, state) {
+                // TODO: implement listener
+              },
+              builder: (context, state) {
+                return Form(
+                  key: _registerFormKey,
+                  child: Column(
+                    children: [
+                      Image.asset(
+                        AppImagesUrl.logo,
+                        width: 100,
+                        height: 100,
                       ),
-                    ),
+                      const SizedBox(height: 16),
+                      CustomTextFormField(
+                        controller: _firstNameController,
+                        validator: (val) {
+                          if (val!.isEmpty) {
+                            return AppStrings.required;
+                          }
+                          return null;
+                        },
+                        keyBoardType: TextInputType.name,
+                        obscureText: false,
+                        hintText: AppStrings.firstName,
+                        suffix: null,
+                      ),
+                      const SizedBox(height: 10),
+                      CustomTextFormField(
+                        controller: _lastNameController,
+                        validator: (val) {
+                          if (val!.isEmpty) {
+                            return AppStrings.required;
+                          }
+                          return null;
+                        },
+                        keyBoardType: TextInputType.name,
+                        obscureText: false,
+                        hintText: AppStrings.lastName,
+                        suffix: null,
+                      ),
+                      const SizedBox(height: 10),
+                      CustomTextFormField(
+                        controller: _emailNameController,
+                        validator: (val) {
+                          if (val!.isEmpty) {
+                            return AppStrings.required;
+                          } else if (!ValidationRules.emailValidation.hasMatch(val)) {
+                            return AppStrings.provideValidEmail;
+                          }
+                          return null;
+                        },
+                        keyBoardType: TextInputType.emailAddress,
+                        obscureText: false,
+                        hintText: AppStrings.email,
+                        suffix: null,
+                      ),
+                      const SizedBox(height: 10),
+                      CustomTextFormField(
+                        controller: _passwordNameController,
+                        validator: (val) {
+                          if (val!.isEmpty) {
+                            return AppStrings.required;
+                          }
+                          return null;
+                        },
+                        keyBoardType: TextInputType.visiblePassword,
+                        obscureText: !isPasswordVisible,
+                        hintText: AppStrings.password,
+                        suffix: InkWell(
+                          onTap: () {
+                            setState(() {
+                              isPasswordVisible = !isPasswordVisible;
+                            });
+                          },
+                          child: Icon(
+                            isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                            color: AppColor.greyColor,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      RoundedElevatedButton(
+                        buttonText: AppStrings.register,
+                        onPressed: () {
+                          if (_registerFormKey.currentState!.validate()) {}
+                        },
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 10),
-                  RoundedElevatedButton(
-                    buttonText: AppStrings.register,
-                    onPressed: () {
-                      if (_registerFormKey.currentState!.validate()) {}
-                    },
-                  ),
-                ],
-              ),
+                );
+              },
             ),
           ),
         ),

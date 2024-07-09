@@ -13,7 +13,7 @@ import '../../core/error/failure.dart';
 abstract interface class IAuthRepository {
   Future<Either<Failure, User>> register({
     required String firstName,
-    required String lastrName,
+    required String lastName,
     required String email,
     required String password,
   });
@@ -25,7 +25,7 @@ class AuthRepository implements IAuthRepository {
   @override
   Future<Either<Failure, User>> register({
     required String firstName,
-    required String lastrName,
+    required String lastName,
     required String email,
     required String password,
   }) async {
@@ -35,7 +35,7 @@ class AuthRepository implements IAuthRepository {
           userId: ID.unique(),
           email: email,
           password: password,
-          name: '$firstName $lastrName',
+          name: '$firstName $lastName',
         );
         await _appWriteProvider.database!.createDocument(
             databaseId: AppwriteConstants.databaseId,
@@ -44,8 +44,8 @@ class AuthRepository implements IAuthRepository {
             data: {
               "id": user.$id,
               "first_name": firstName,
-              "last_name": lastrName,
-              "full_name": "$firstName $lastrName",
+              "last_name": lastName,
+              "full_name": "$firstName $lastName",
               "email": email,
             });
 
