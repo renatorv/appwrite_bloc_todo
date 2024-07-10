@@ -1,6 +1,10 @@
+import 'package:appwrite_bloc_todo/core/routes/route_names.dart';
+import 'package:appwrite_bloc_todo/core/utils/custom_snackbar.dart';
+import 'package:appwrite_bloc_todo/core/utils/full_screen_dialog_loader.dart';
 import 'package:appwrite_bloc_todo/features/auth/cubit/register_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../core/theme/app_color.dart';
 import '../../../core/utils/app_images_url.dart';
@@ -24,6 +28,13 @@ class _RegisterViewState extends State<RegisterView> {
   final _passwordNameController = TextEditingController();
   bool isPasswordVisible = false;
 
+  clearText() {
+    _firstNameController.clear();
+    _lastNameController.clear();
+    _emailNameController.clear();
+    _passwordNameController.clear();
+  }
+
   @override
   void dispose() {
     _firstNameController.dispose();
@@ -43,7 +54,16 @@ class _RegisterViewState extends State<RegisterView> {
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             child: BlocConsumer<RegisterCubit, RegisterState>(
               listener: (context, state) {
-                // TODO: implement listener
+                if (state is RegisterLoading) {
+                  FullScreenDialogLoader.show(context);
+                } else if (state is RegisterSuccess) {
+                  clearText();
+                  FullScreenDialogLoader.cancel(context);
+                  CustomSnackbar.showSuccess(context, AppStrings.accountCreated);
+                  context.goNamed(RouteNames.login);
+                } else if (state is RegisterError) {
+                  CustomSnackbar.showError(context, state.error);
+                }
               },
               builder: (context, state) {
                 return Form(
@@ -127,7 +147,13 @@ class _RegisterViewState extends State<RegisterView> {
                       RoundedElevatedButton(
                         buttonText: AppStrings.register,
                         onPressed: () {
-                          if (_registerFormKey.currentState!.validate()) {}
+                          if (_registerFormKey.currentState!.validate()) {
+                            context.read<RegisterCubit>().register(
+                                firstName: _firstNameController.text,
+                                lastName: _lastNameController.text,
+                                email: _emailNameController.text,
+                                password: _passwordNameController.text);
+                          }
                         },
                       ),
                     ],

@@ -34,8 +34,15 @@ class FullScreenDialogLoader {
       );
     }
   }
+
+  static void cancel(BuildContext context) {
+    if (_isDialogOpen) {
+      Navigator.of(context, rootNavigator: true).pop();
+      _isDialogOpen = false;
+    }
+  }
+
+  static bool isDialogOpen() {
+    return _isDialogOpen;
+  }
 }
-
-
-https://www.youtube.com/watch?v=xP5kjxCRfYs
-7:45
